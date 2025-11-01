@@ -7,6 +7,8 @@ import { ProvincesModule } from './app/modules/provinces/provinces.module';
 import { DistrictsModule } from './app/modules/districts/districts.module';
 import { SchoolsModule } from './app/modules/schools/schools.module';
 import { ClassesModule } from './app/modules/classes/classes.module';
+import { GroupsModule } from './app/modules/groups/groups.module';
+import { UnitsModule } from './app/modules/units/units.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { ClassesModule } from './app/modules/classes/classes.module';
     DistrictsModule,
     SchoolsModule,
     ClassesModule,
+    GroupsModule,
+    UnitsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
