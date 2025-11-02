@@ -24,7 +24,7 @@ export interface ITokenResponse extends IToken {
 }
 
 @Schema({ collection: 'tokens', timestamps: true })
-export class Token {
+export class Token implements IToken {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   userId: Types.ObjectId;
 

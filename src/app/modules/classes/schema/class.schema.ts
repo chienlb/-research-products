@@ -20,7 +20,7 @@ export interface IClassResponse extends IClass {
 }
 
 @Schema({ collection: 'classes', timestamps: true })
-export class Class {
+export class Class implements IClass {
   @Prop({ required: true })
   classId: string;
 

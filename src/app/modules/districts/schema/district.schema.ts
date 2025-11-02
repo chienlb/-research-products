@@ -8,6 +8,8 @@ export interface IDistrict {
   districtName: string;
   districtCode: string;
   provinceCode: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IDistrictResponse extends IDistrict {
@@ -17,7 +19,7 @@ export interface IDistrictResponse extends IDistrict {
 }
 
 @Schema({ collection: 'districts', timestamps: true })
-export class District {
+export class District implements IDistrict {
   @Prop({ required: true })
   districtId: string;
 

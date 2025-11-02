@@ -20,7 +20,7 @@ export interface IFeatureFlag {
 }
 
 @Schema({ collection: 'feature-flags', timestamps: true })
-export class FeatureFlag {
+export class FeatureFlag implements IFeatureFlag {
   @Prop({ required: true })
   flagName: string;
 

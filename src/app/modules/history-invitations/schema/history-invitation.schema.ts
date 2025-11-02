@@ -8,10 +8,23 @@ export interface IHistoryInvitation {
   code: string; // Mã mời đã sử dụng
   invitedAt: Date; // Ngày được mời
   status: string; // Trạng thái lời mời (accepted, pending, declined)
+  createdAt?: Date; // Ngày tạo
+  updatedAt?: Date; // Ngày cập nhật
+}
+
+export interface IHistoryInvitationInput extends Partial<IHistoryInvitation> {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IHistoryInvitationResponse extends IHistoryInvitation {
+  _id: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 @Schema({ collection: 'history-invitations', timestamps: true })
-export class HistoryInvitation {
+export class HistoryInvitation implements IHistoryInvitation {
   @Prop({ required: true, type: Types.ObjectId, ref: 'users' })
   userId: Types.ObjectId;
 

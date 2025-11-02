@@ -12,7 +12,7 @@ export enum BadgeType {
 }
 
 export interface IBadge {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   name: string; // Tên huy hiệu
   description: string; // Mô tả ngắn
   iconUrl: string; // Ảnh biểu tượng huy hiệu
@@ -41,7 +41,7 @@ export interface IBadgeInput extends Partial<IBadge> {
 }
 
 @Schema({ collection: 'badges', timestamps: true })
-export class Badge {
+export class Badge implements IBadge {
   @Prop({ required: true })
   name: string;
 

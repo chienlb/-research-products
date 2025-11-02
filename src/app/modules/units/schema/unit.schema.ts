@@ -62,7 +62,7 @@ export interface IUnitResponse extends IUnit {
 }
 
 @Schema({ collection: 'units', timestamps: true })
-export class Unit {
+export class Unit implements IUnit {
   @Prop({ required: true })
   name: string;
 

@@ -20,7 +20,7 @@ export interface ISchoolResponse extends ISchool {
 }
 
 @Schema({ collection: 'schools', timestamps: true })
-export class School {
+export class School implements ISchool {
   @Prop({ required: true })
   schoolId: string;
 

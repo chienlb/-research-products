@@ -15,7 +15,7 @@ export interface IUserBadge {
 }
 
 @Schema({ collection: 'user_badges', timestamps: true })
-export class UserBadge {
+export class UserBadge implements IUserBadge {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',

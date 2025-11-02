@@ -21,8 +21,8 @@ export interface IInvitationCode {
   isActive: boolean; // Mã còn hiệu lực không
   createdBy: Types.ObjectId; // ID người tạo mã
   updatedBy?: Types.ObjectId; // ID người cập nhật mã lần cuối
-  createdAt: Date; // Ngày tạo
-  updatedAt: Date; // Ngày cập nhật
+  createdAt?: Date; // Ngày tạo
+  updatedAt?: Date; // Ngày cập nhật
 }
 
 export interface IInvitationCodeResponse extends IInvitationCode {
@@ -37,7 +37,7 @@ export interface IInvitationCodeInput extends Partial<IInvitationCode> {
 }
 
 @Schema({ collection: 'invitation-codes', timestamps: true })
-export class InvitationCode {
+export class InvitationCode implements IInvitationCode {
   @Prop({ required: true, unique: true })
   code: string;
 

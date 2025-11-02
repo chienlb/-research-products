@@ -40,7 +40,7 @@ export enum LessonStatus {
 }
 
 export interface ILesson {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
 
   title: string; // Tên bài học
   slug: string; // Đường dẫn định danh
@@ -84,8 +84,8 @@ export interface ILesson {
   videoIntro?: string; // Video hướng dẫn
   tags?: string[]; // Từ khóa (A1, greetings, vocabulary, ...)
   isActive: LessonStatus; // Trạng thái hiển thị
-  createdAt: Date; // Ngày tạo
-  updatedAt: Date; // Ngày cập nhật
+  createdAt?: Date; // Ngày tạo
+  updatedAt?: Date; // Ngày cập nhật
 }
 
 export interface ILessonInput extends Partial<ILesson> {
@@ -100,7 +100,7 @@ export interface ILessonResponse extends Omit<ILesson, '_id'> {
 }
 
 @Schema({ collection: 'lessons', timestamps: true })
-export class Lesson {
+export class Lesson implements ILesson {
   @Prop({ required: true })
   title: string;
 

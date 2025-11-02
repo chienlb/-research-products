@@ -16,7 +16,7 @@ import { FeatureFlagsModule } from './app/modules/feature-flags/feature-flags.mo
 import { BadgesModule } from './app/modules/badges/badges.module';
 import { UserBadgesModule } from './app/modules/user-badges/user-badges.module';
 import { LiteraturesModule } from './app/modules/literatures/literatures.module';
-import { SongsModule } from './app/modules/songs/songs.module';
+import { CompetitionsModule } from './app/modules/competitions/competitions.module';
 
 @Module({
   imports: [
@@ -35,7 +35,7 @@ import { SongsModule } from './app/modules/songs/songs.module';
     BadgesModule,
     UserBadgesModule,
     LiteraturesModule,
-    SongsModule,
+    CompetitionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

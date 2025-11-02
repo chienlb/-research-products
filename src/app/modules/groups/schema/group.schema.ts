@@ -40,7 +40,7 @@ export interface IGroupResponse extends IGroup {
 }
 
 @Schema({ collection: 'groups', timestamps: true })
-export class Group {
+export class Group implements IGroup {
   @Prop({ required: true })
   groupName: string;
 

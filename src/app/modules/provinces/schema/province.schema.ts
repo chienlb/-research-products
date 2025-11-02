@@ -17,7 +17,7 @@ export interface IProvinceResponse extends IProvince {
 }
 
 @Schema({ collection: 'provinces', timestamps: true })
-export class Province {
+export class Province implements IProvince {
   @Prop({ required: true })
   provinceId: string;
 
