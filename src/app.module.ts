@@ -17,6 +17,9 @@ import { BadgesModule } from './app/modules/badges/badges.module';
 import { UserBadgesModule } from './app/modules/user-badges/user-badges.module';
 import { LiteraturesModule } from './app/modules/literatures/literatures.module';
 import { CompetitionsModule } from './app/modules/competitions/competitions.module';
+import { PackagesModule } from './app/modules/packages/packages.module';
+import { SubscriptionsModule } from './app/modules/subscriptions/subscriptions.module';
+import { PaymentsModule } from './app/modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -36,6 +39,9 @@ import { CompetitionsModule } from './app/modules/competitions/competitions.modu
     UserBadgesModule,
     LiteraturesModule,
     CompetitionsModule,
+    PackagesModule,
+    SubscriptionsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
