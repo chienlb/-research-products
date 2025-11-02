@@ -22,6 +22,7 @@ import { SubscriptionsModule } from './app/modules/subscriptions/subscriptions.m
 import { PaymentsModule } from './app/modules/payments/payments.module';
 import { AssignmentsModule } from './app/modules/assignments/assignments.module';
 import { SubmissionsModule } from './app/modules/submissions/submissions.module';
+import { NotificationsModule } from './app/modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { SubmissionsModule } from './app/modules/submissions/submissions.module'
     PaymentsModule,
     AssignmentsModule,
     SubmissionsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
