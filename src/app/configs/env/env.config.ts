@@ -34,6 +34,18 @@ export const envSchema = z.object({
   FIREBASE_CLIENT_EMAIL: z.string().min(1, 'FIREBASE_CLIENT_EMAIL is required'),
   FIREBASE_PRIVATE_KEY: z.string().min(1, 'FIREBASE_PRIVATE_KEY is required'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('debug'),
+  CORS_ORIGINS: z
+    .string()
+    .default('http://localhost:3000')
+    .transform((val) => val.split(',').map((origin) => origin.trim())),
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().min(1_000).default(60_000), // 1 minute
+  RATE_LIMIT_MAX: z.coerce.number().min(1).default(100), // 100 requests per window per IP
+  BODY_LIMIT_JSON: z.string().default('1mb'),
+  BODY_LIMIT_URLENCODED: z.string().default('1mb'),
+  TRUST_PROXY: z
+    .string()
+    .transform((val) => val === 'true')
+    .default(false),
 });
 
 export type Env = z.infer<typeof envSchema>;
