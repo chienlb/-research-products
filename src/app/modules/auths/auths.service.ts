@@ -15,10 +15,14 @@ import {
   UserRole,
 } from '../users/schema/user.schema';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { InvitationCodeDocument } from '../invitation-codes/schema/invitation-code.schema';
 import { InvitationCodesService } from '../invitation-codes/invitation-codes.service';
+import { HistoryInvitationsService } from '../history-invitations/history-invitations.service';
 import { CreateInvitationCodeDto } from '../invitation-codes/dto/create-invitation-code.dto';
-
+import { HistoryInvitationStatus } from '../history-invitations/dto/create-history-invitation.dto';
+import {
+  InvitationCode,
+  InvitationCodeDocument,
+} from '../invitation-codes/schema/invitation-code.schema';
 @Injectable()
 export class AuthsService {
   private readonly logger = new Logger(AuthsService.name);
@@ -27,10 +31,11 @@ export class AuthsService {
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
 
-    @InjectModel('InvitationCode')
+    @InjectModel(InvitationCode.name)
     private readonly inviteCodeModel: Model<InvitationCodeDocument>,
 
     private readonly invitationCodesService: InvitationCodesService,
+    private readonly historyInvitationsService: HistoryInvitationsService,
   ) {}
 
   async register(registerAuthDto: RegisterAuthDto): Promise<Partial<User>> {
@@ -101,6 +106,18 @@ export class AuthsService {
         }
 
         invitedBy = inviter._id.toString();
+
+        const historyUsage =
+          await this.historyInvitationsService.createHistoryInvitation({
+            userId: inviterUser._id.toString(),
+            code: inviter.code,
+            invitedAt: new Date().toISOString(),
+            status: HistoryInvitationStatus.ACCEPTED,
+          });
+
+        this.logger.log(
+          `Invitation code ${inviter.code} used by ${registerAuthDto.email}. History record ID: ${historyUsage._id}`,
+        );
       }
 
       const salt = await bcrypt.genSalt(10);

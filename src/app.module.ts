@@ -32,9 +32,11 @@ import { RedisModule } from './app/configs/database/redis.config';
 
 import { ConfigModule } from '@nestjs/config';
 import { AuthsModule } from './app/modules/auths/auths.module';
+import { MongoDBModule } from './app/configs/database/mongodb.config';
 
 @Module({
   imports: [
+    MongoDBModule,
     UsersModule,
     TokensModule,
     ProvincesModule,

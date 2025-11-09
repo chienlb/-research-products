@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateHistoryInvitationDto } from './dto/create-history-invitation.dto';
 import { UpdateHistoryInvitationDto } from './dto/update-history-invitation.dto';
-import { HistoryInvitationDocument } from './schema/history-invitation.schema';
+import {
+  HistoryInvitation,
+  HistoryInvitationDocument,
+} from './schema/history-invitation.schema';
 import { Model } from 'mongoose';
 import { UsersService } from '../users/users.service';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class HistoryInvitationsService {
   constructor(
+    @InjectModel(HistoryInvitation.name)
     private readonly historyModel: Model<HistoryInvitationDocument>,
     private readonly userService: UsersService,
   ) {}
