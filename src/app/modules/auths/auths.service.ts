@@ -23,6 +23,8 @@ import {
   InvitationCode,
   InvitationCodeDocument,
 } from '../invitation-codes/schema/invitation-code.schema';
+import { LoginAuthDto } from './dto/login-auth.dto';
+import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class AuthsService {
   private readonly logger = new Logger(AuthsService.name);
@@ -169,6 +171,63 @@ export class AuthsService {
       }
 
       throw new BadRequestException('Registration failed. Please try again.');
+    }
+  }
+
+  async login(
+    loginAuthDto: LoginAuthDto,
+  ): Promise<Partial<User> & { accessToken: string; refreshToken: string }> {
+    try {
+      const user = await this.userModel.findOne({
+        $or: [{ email: loginAuthDto.email }, { username: loginAuthDto.email }],
+      });
+
+      if (!user) {
+        throw new NotFoundException(
+          'User not found with the provided identifier.',
+        );
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        loginAuthDto.password,
+        user.password,
+      );
+
+      if (!isPasswordValid) {
+        throw new BadRequestException('Invalid password.');
+      }
+
+      const accessToken = jwt.sign(
+        { userId: user._id, role: user.role },
+        process.env.JWT_SECRET || 'default_secret',
+        { expiresIn: '1h' },
+      );
+
+      const refreshToken = jwt.sign(
+        { userId: user._id, role: user.role },
+        process.env.JWT_REFRESH_SECRET || 'default_refresh_secret',
+        { expiresIn: '7d' },
+      );
+
+      user.tokenVerify = accessToken;
+      await user.save();
+
+      return {
+        ...user.toObject(),
+        accessToken,
+        refreshToken,
+      };
+    } catch (error) {
+      this.logger.error(`Error logging in user ${loginAuthDto.email}:`, error);
+
+      if (
+        error instanceof BadRequestException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
+
+      throw new BadRequestException('Login failed. Please try again.');
     }
   }
 }

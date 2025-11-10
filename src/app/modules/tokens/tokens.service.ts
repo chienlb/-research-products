@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
+import { Token, TokenDocument } from './schema/token.schema';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TokensService {
-  create(createTokenDto: CreateTokenDto) {
-    return 'This action adds a new token';
-  }
+  constructor(
+    @InjectModel(Token.name)
+    private readonly tokenModel: Model<TokenDocument>,
+    private readonly userService: UsersService,
+  ) {}
 
-  findAll() {
-    return `This action returns all tokens`;
-  }
+  async createToken(createTokenDto: CreateTokenDto) {
+    const user = await this.userService.findUserById(createTokenDto.userId);
+    if (!user) {
+      throw new NotFoundException('User does not exist.');
+    }
+    const newToken = new this.tokenModel({
+      ...createTokenDto,
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
-  }
-
-  update(id: number, updateTokenDto: UpdateTokenDto) {
-    return `This action updates a #${id} token`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} token`;
+    try {
+      return await newToken.save();
+    } catch (error: unknown) {
+      throw new Error(
+        'Failed to create token: ' +
+          (error instanceof Error ? error.message : 'Unknown error'),
+      );
+    }
   }
 }
