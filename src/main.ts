@@ -101,7 +101,7 @@ async function bootstrap(): Promise<void> {
 
   app.enableShutdownHooks();
 
-  await app.listen(env.PORT);
+  await app.listen(env.PORT, '0.0.0.0');
   const prefix = env.API_PREFIX;
   app.setGlobalPrefix(prefix);
   logger.log(`Server started at http://localhost:${env.PORT}`);
