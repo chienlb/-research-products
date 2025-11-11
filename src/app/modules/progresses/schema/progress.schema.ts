@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type ProgressDocument = HydratedDocument<Progress>;
 
@@ -82,6 +83,8 @@ export class Progress implements IProgress {
 }
 
 export const ProgressSchema = SchemaFactory.createForClass(Progress);
+
+ProgressSchema.plugin(excludeFieldsPlugin);
 
 // Middleware: tự động cập nhật trạng thái dựa vào phần trăm
 ProgressSchema.pre('save', function (next) {

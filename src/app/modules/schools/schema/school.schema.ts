@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type SchoolDocument = HydratedDocument<School>;
 
@@ -44,3 +45,4 @@ export class School implements ISchool {
 }
 
 export const SchoolSchema = SchemaFactory.createForClass(School);
+SchoolSchema.plugin(excludeFieldsPlugin);

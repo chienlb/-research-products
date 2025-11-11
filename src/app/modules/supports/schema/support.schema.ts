@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type SupportDocument = HydratedDocument<Support>;
 
@@ -53,4 +54,5 @@ export class Support implements ISupport {
 }
 
 export const SupportSchema = SchemaFactory.createForClass(Support);
+SupportSchema.plugin(excludeFieldsPlugin);
 SupportSchema.index({ userId: 1, status: 1 });

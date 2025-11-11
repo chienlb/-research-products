@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type NotificationDocument = HydratedDocument<Notification>;
 
@@ -59,7 +60,7 @@ export class Notification implements INotification {
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);
-
+NotificationSchema.plugin(excludeFieldsPlugin);
 // Middleware: đánh dấu readAt khi isRead = true
 NotificationSchema.pre('save', function (next) {
   if (this.isRead && !this.readAt) this.readAt = new Date();

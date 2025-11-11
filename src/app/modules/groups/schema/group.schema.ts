@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type GroupDocument = HydratedDocument<Group>;
 
@@ -88,3 +89,4 @@ export class Group implements IGroup {
 }
 
 export const GroupSchema = SchemaFactory.createForClass(Group);
+GroupSchema.plugin(excludeFieldsPlugin);

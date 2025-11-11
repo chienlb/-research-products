@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type TokenDocument = HydratedDocument<Token>;
 
@@ -45,3 +46,4 @@ export class Token implements IToken {
 }
 
 export const TokenSchema = SchemaFactory.createForClass(Token);
+TokenSchema.plugin(excludeFieldsPlugin);

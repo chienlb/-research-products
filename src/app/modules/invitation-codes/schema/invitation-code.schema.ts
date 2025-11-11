@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type InvitationCodeDocument = HydratedDocument<InvitationCode>;
 
@@ -78,3 +79,6 @@ export class InvitationCode implements IInvitationCode {
 
 export const InvitationCodeSchema =
   SchemaFactory.createForClass(InvitationCode);
+
+  
+InvitationCodeSchema.plugin(excludeFieldsPlugin);

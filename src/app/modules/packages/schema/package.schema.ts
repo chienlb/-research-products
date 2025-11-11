@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type PackageDocument = HydratedDocument<Package>;
 
@@ -63,4 +64,5 @@ export class Package implements IPackage {
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);
+PackageSchema.plugin(excludeFieldsPlugin);
 PackageSchema.index({ code: 1 }, { unique: true });

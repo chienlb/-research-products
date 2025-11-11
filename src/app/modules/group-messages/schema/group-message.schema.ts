@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type GroupMessageDocument = HydratedDocument<GroupMessage>;
 
@@ -67,7 +68,7 @@ export class GroupMessage implements IGroupMessage {
 }
 
 export const GroupMessageSchema = SchemaFactory.createForClass(GroupMessage);
-
+GroupMessageSchema.plugin(excludeFieldsPlugin);
 // Middleware: cập nhật thời gian khi chỉnh sửa
 GroupMessageSchema.pre('save', function (next) {
   if (this.isModified('content')) {

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type AssignmentDocument = HydratedDocument<Assignment>;
 
@@ -67,5 +68,6 @@ export class Assignment implements IAssignment {
 }
 
 export const AssignmentSchema = SchemaFactory.createForClass(Assignment);
+AssignmentSchema.plugin(excludeFieldsPlugin);
 AssignmentSchema.index({ classId: 1, dueDate: -1 });
 AssignmentSchema.index({ title: 'text', description: 'text' });

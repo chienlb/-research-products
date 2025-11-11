@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type ProvinceDocument = HydratedDocument<Province>;
 
@@ -32,3 +33,4 @@ export class Province implements IProvince {
 }
 
 export const ProvinceSchema = SchemaFactory.createForClass(Province);
+ProvinceSchema.plugin(excludeFieldsPlugin);

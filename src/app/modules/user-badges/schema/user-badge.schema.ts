@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type UserBadgeDocument = HydratedDocument<UserBadge>;
 
@@ -55,3 +56,4 @@ export const UserBadgeSchema = SchemaFactory.createForClass(UserBadge);
 
 // Index để đảm bảo mỗi user chỉ có 1 bản ghi cho cùng 1 badge
 UserBadgeSchema.index({ userId: 1, badgeId: 1 }, { unique: true });
+UserBadgeSchema.plugin(excludeFieldsPlugin);

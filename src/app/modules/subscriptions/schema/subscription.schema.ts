@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type SubscriptionDocument = HydratedDocument<Subscription>;
 
@@ -51,7 +52,7 @@ export class Subscription implements ISubscription {
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(Subscription);
-
+SubscriptionSchema.plugin(excludeFieldsPlugin);
 // Middleware: tự động cập nhật trạng thái khi hết hạn
 SubscriptionSchema.pre('save', function (next) {
   const now = new Date();

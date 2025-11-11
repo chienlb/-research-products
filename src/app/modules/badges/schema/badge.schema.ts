@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type BadgeDocument = HydratedDocument<Badge>;
 
@@ -80,3 +81,4 @@ export class Badge implements IBadge {
 }
 
 export const BadgeSchema = SchemaFactory.createForClass(Badge);
+BadgeSchema.plugin(excludeFieldsPlugin);

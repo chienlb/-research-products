@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type LiteratureDocument = HydratedDocument<Literature>;
 
@@ -94,4 +95,5 @@ export class Literature {
 }
 
 export const LiteratureSchema = SchemaFactory.createForClass(Literature);
+LiteratureSchema.plugin(excludeFieldsPlugin);
 LiteratureSchema.index({ title: 'text', topic: 'text' });

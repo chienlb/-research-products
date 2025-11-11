@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type FeatureFlagDocument = HydratedDocument<FeatureFlag>;
 
@@ -41,3 +42,4 @@ export class FeatureFlag implements IFeatureFlag {
 }
 
 export const FeatureFlagSchema = SchemaFactory.createForClass(FeatureFlag);
+FeatureFlagSchema.plugin(excludeFieldsPlugin);

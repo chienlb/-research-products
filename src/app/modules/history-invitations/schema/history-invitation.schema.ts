@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type HistoryInvitationDocument = HydratedDocument<HistoryInvitation>;
 
@@ -40,3 +41,4 @@ export class HistoryInvitation implements IHistoryInvitation {
 
 export const HistoryInvitationSchema =
   SchemaFactory.createForClass(HistoryInvitation);
+HistoryInvitationSchema.plugin(excludeFieldsPlugin);

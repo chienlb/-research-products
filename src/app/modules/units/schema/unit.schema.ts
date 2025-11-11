@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type UnitDocument = HydratedDocument<Unit>;
 
@@ -147,3 +148,4 @@ export class Unit implements IUnit {
 }
 
 export const UnitSchema = SchemaFactory.createForClass(Unit);
+UnitSchema.plugin(excludeFieldsPlugin);

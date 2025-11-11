@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type PaymentDocument = HydratedDocument<Payment>;
 
@@ -68,5 +69,6 @@ export class Payment implements IPayment {
 }
 
 export const PaymentSchema = SchemaFactory.createForClass(Payment);
+PaymentSchema.plugin(excludeFieldsPlugin);
 PaymentSchema.index({ userId: 1, status: 1 });
 PaymentSchema.index({ transactionId: 1 }, { unique: true, sparse: true });

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type DistrictDocument = HydratedDocument<District>;
 
@@ -34,3 +35,4 @@ export class District implements IDistrict {
 }
 
 export const DistrictSchema = SchemaFactory.createForClass(District);
+DistrictSchema.plugin(excludeFieldsPlugin);

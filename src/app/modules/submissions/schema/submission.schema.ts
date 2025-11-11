@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type SubmissionDocument = HydratedDocument<Submission>;
 
@@ -57,6 +58,6 @@ export class Submission implements ISubmission {
 }
 
 export const SubmissionSchema = SchemaFactory.createForClass(Submission);
-
+SubmissionSchema.plugin(excludeFieldsPlugin);
 SubmissionSchema.index({ assignmentId: 1, studentId: 1 }, { unique: true });
 SubmissionSchema.index({ status: 1 });

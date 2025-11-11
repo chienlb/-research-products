@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type CompetitionDocument = HydratedDocument<Competition>;
 
@@ -128,7 +129,7 @@ export class Competition implements ICompetition {
 }
 
 export const CompetitionSchema = SchemaFactory.createForClass(Competition);
-
+CompetitionSchema.plugin(excludeFieldsPlugin);
 CompetitionSchema.pre('save', function (next) {
   const now = new Date();
   if (this.endTime < now) this.status = CompetitionStatus.ENDED;

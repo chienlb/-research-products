@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, HydratedDocument } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type DiscussionDocument = HydratedDocument<Discussion>;
 
@@ -64,7 +65,7 @@ export class Discussion implements IDiscussion {
 }
 
 export const DiscussionSchema = SchemaFactory.createForClass(Discussion);
-
+DiscussionSchema.plugin(excludeFieldsPlugin);
 // Tự động đánh dấu thời gian khi chỉnh sửa
 DiscussionSchema.pre('save', function (next) {
   if (this.isModified('content')) {

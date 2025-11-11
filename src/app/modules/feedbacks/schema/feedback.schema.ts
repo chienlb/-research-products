@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { excludeFieldsPlugin } from '../../../common/plugin/excludeFields.plugin';
 
 export type FeedbackDocument = HydratedDocument<Feedback>;
 
@@ -57,5 +58,6 @@ export class Feedback implements IFeedback {
 }
 
 export const FeedbackSchema = SchemaFactory.createForClass(Feedback);
+FeedbackSchema.plugin(excludeFieldsPlugin);
 FeedbackSchema.index({ userId: 1, type: 1 });
 FeedbackSchema.index({ isResolved: 1 });
