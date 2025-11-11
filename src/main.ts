@@ -101,9 +101,9 @@ async function bootstrap(): Promise<void> {
 
   app.enableShutdownHooks();
 
-  const port = env.PORT || 3000;
+  const port = process.env.PORT || env.PORT || 3000;
   await app.listen(port, '0.0.0.0');
-  logger.log(`Server started at http://localhost:${env.PORT}`);
+  logger.log(`Server started on port ${port} (listening on 0.0.0.0)`);
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
