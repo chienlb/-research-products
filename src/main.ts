@@ -114,6 +114,7 @@ async function bootstrap(): Promise<void> {
     .setTitle(env.SWAGGER_TITLE)
     .setDescription(env.SWAGGER_DESCRIPTION)
     .setVersion(env.SWAGGER_VERSION)
+    .addServer('/api/v1')
     .addTag(env.SWAGGER_TAG)
     .build();
 
