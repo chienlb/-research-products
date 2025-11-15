@@ -1,41 +1,152 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserDocument } from './schema/user.schema';
-import { Model } from 'mongoose';
+import { User, UserDocument, UserRole } from './schema/user.schema';
+import mongoose, { ClientSession, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import { InvitationCodeType } from '../invitation-codes/schema/invitation-code.schema';
+import { InvitationCodesService } from '../invitation-codes/invitation-codes.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-  ) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
-
-  findAll() {
-    return `This action returns all users`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
-  async findUserById(userId: string) {
+    @Inject(forwardRef(() => InvitationCodesService))
+    private readonly invitationCodesService: InvitationCodesService,
+  ) { }
+  async create(createUserDto: CreateUserDto) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-      const user = await this.userModel.findById(userId);
+      const existingUser = await this.userModel.findOne({
+        $or: [
+          { email: createUserDto.email },
+          { username: createUserDto.username },
+        ],
+      });
+      if (existingUser) {
+        throw new ConflictException('Email or username already exists');
+      }
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const newUser = new this.userModel({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+      await newUser.save({ session });
+
+      if (createUserDto.role !== UserRole.STUDENT) {
+        const invitationCode =
+          await this.invitationCodesService.createInvitationCode(
+            {
+              createdBy: newUser._id.toString(),
+              event: 'Invitation code for student registration',
+              description: `Invitation code created by ${newUser.username}`,
+              type: InvitationCodeType.TRIAL,
+              totalUses: 1,
+              usesLeft: 1,
+              startedAt: new Date().toISOString(),
+            },
+            session,
+          );
+        if (!invitationCode.data) {
+          throw new BadRequestException('Failed to create invitation code');
+        }
+        await session.commitTransaction();
+        session.endSession();
+        return newUser;
+      }
+      return newUser;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw new Error('Failed to create user: ' + error.message);
+    }
+  }
+
+  async findAll(session?: ClientSession) {
+    try {
+      const users = await this.userModel.find(
+        { isDeleted: false },
+        null,
+        session ? { session } : {},
+      );
+      return users;
+    } catch (error) {
+      throw new Error('Failed to find all users: ' + error.message);
+    }
+  }
+
+  async findUserById(id: string, session?: ClientSession) {
+    const user = await this.userModel.findById(
+      id,
+      null,
+      session ? { session } : {},
+    );
+    return user;
+  }
+
+  async updateUserById(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    session?: ClientSession,
+  ) {
+    try {
+      const options = session ? { session, new: true } : { new: true };
+      const user = await this.userModel.findByIdAndUpdate(
+        id,
+        updateUserDto,
+        options,
+      );
       return user;
     } catch (error) {
-      throw new Error('Failed to find user by ID: ' + error.message);
+      throw new Error('Failed to update user by ID: ' + error.message);
     }
+  }
+
+  async remove(id: string, session?: ClientSession) {
+    try {
+      const user = await this.userModel.findByIdAndUpdate(
+        id,
+        { isDeleted: true },
+        { session },
+      );
+      return user;
+    } catch (error) {
+      throw new Error('Failed to delete user by ID: ' + error.message);
+    }
+  }
+
+  async getUserBySlug(slug: string, session?: ClientSession) {
+    const user = await this.userModel.findOne(
+      { slug, isDeleted: false },
+      null,
+      session ? { session } : {},
+    );
+    return user;
+  }
+
+  async getUserByEmail(email: string, session?: ClientSession) {
+    const user = await this.userModel.findOne(
+      { email, isDeleted: false },
+      null,
+      session ? { session } : {},
+    );
+    return user;
+  }
+
+  async getUserByUsername(username: string, session?: ClientSession) {
+    const user = await this.userModel.findOne(
+      { username, isDeleted: false },
+      null,
+      session ? { session } : {},
+    );
+    return user;
   }
 }

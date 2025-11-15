@@ -3,7 +3,6 @@ import { TokensService } from './tokens.service';
 import { TokensController } from './tokens.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Token, TokenSchema } from './schema/token.schema';
-import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
 
 @Module({
@@ -12,6 +11,6 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
   ],
   controllers: [TokensController],
-  providers: [TokensService, UsersService],
+  providers: [TokensService],
 })
-export class TokensModule {}
+export class TokensModule { }

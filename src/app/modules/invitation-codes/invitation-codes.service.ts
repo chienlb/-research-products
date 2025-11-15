@@ -3,6 +3,8 @@ import {
   NotFoundException,
   BadRequestException,
   Logger,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Model } from 'mongoose';
@@ -21,6 +23,7 @@ export class InvitationCodesService {
   constructor(
     @InjectModel(InvitationCode.name)
     private readonly invitationCodeModel: Model<InvitationCodeDocument>,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
   ) { }
 
